@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="repository"
+            type="com.fbosch.assignment.githubrepositories.model.Repository" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/repository_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{repository.name}"
+            app:layout_constraintBottom_toTopOf="@+id/repository_description"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Repository name" />
+
+        <TextView
+            android:id="@+id/repository_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{repository.description}"
+            app:layout_constraintBottom_toTopOf="@+id/repository_language"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/repository_name"
+            tools:text="Repository description" />
+
+        <TextView
+            android:id="@+id/repository_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{repository.language}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/repository_description"
+            tools:text="Java" />
+
+        <TextView
+            android:id="@+id/repository_stars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@{repository.stars}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/repository_language"
+            app:layout_constraintTop_toBottomOf="@id/repository_description"
+            tools:text="6" />
+
+        <TextView
+            android:id="@+id/repository_forks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@{repository.forks}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/repository_stars"
+            app:layout_constraintTop_toBottomOf="@id/repository_description"
+            tools:text="1" />
+
+        <TextView
+            android:id="@+id/repository_last_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@{repository.lastUpdate}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/repository_forks"
+            app:layout_constraintTop_toBottomOf="@id/repository_description"
+            tools:text="Updated on 29 Dec 2015" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
