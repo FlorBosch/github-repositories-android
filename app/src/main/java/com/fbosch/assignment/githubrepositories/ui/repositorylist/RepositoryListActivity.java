@@ -2,6 +2,7 @@ package com.fbosch.assignment.githubrepositories.ui.repositorylist;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +17,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
 public class RepositoryListActivity extends BaseActivity implements RepositoryListMvpView {
 
@@ -43,6 +46,7 @@ public class RepositoryListActivity extends BaseActivity implements RepositoryLi
         toolbar.setTitle(R.string.app_name);
         listView.setLayoutManager(new LinearLayoutManager(this));
         listView.setHasFixedSize(true);
+        listView.addItemDecoration(new DividerItemDecoration(listView.getContext(), VERTICAL));
         presenter.restoreState(savedInstanceState);
     }
 

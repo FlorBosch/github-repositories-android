@@ -62,6 +62,13 @@ public class Repository implements Parcelable {
         return forks;
     }
 
+    public String getStarsAsString() {
+        return String.valueOf(stars);
+    }
+
+    public String getForksAsString() {
+        return String.valueOf(forks);
+    }
 
     @Override
     public int describeContents() {
