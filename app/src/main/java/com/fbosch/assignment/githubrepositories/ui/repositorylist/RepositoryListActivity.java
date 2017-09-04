@@ -5,12 +5,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.fbosch.assignment.githubrepositories.R;
 import com.fbosch.assignment.githubrepositories.model.Repository;
 import com.fbosch.assignment.githubrepositories.ui.BaseActivity;
+import com.fbosch.assignment.githubrepositories.ui.widget.EndlessScrollRecyclerView;
 
 import java.util.List;
 
@@ -30,7 +30,8 @@ public class RepositoryListActivity extends BaseActivity implements RepositoryLi
     SwipeRefreshLayout swipeRefresh;
 
     @BindView(R.id.repository_list)
-    RecyclerView listView;
+    EndlessScrollRecyclerView listView;
+
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -48,6 +49,7 @@ public class RepositoryListActivity extends BaseActivity implements RepositoryLi
         listView.setLayoutManager(new LinearLayoutManager(this));
         listView.setHasFixedSize(true);
         listView.addItemDecoration(new DividerItemDecoration(listView.getContext(), VERTICAL));
+        listView.setUp(presenter::loadMoreItems);
         presenter.restoreState(savedInstanceState);
     }
 
@@ -73,7 +75,8 @@ public class RepositoryListActivity extends BaseActivity implements RepositoryLi
     @Override
     public void loadMoreRepositories(List<Repository> repositories) {
         swipeRefresh.setRefreshing(false);
-
+        adapter.addItems(repositories);
+        listView.onNewItemsLoaded();
     }
 
     @Override

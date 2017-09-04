@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="endless_scroll_recycler_view_id" type="id" />
+    <item name="endless_scroll_progress_bar_id" type="id" />
+</resources>

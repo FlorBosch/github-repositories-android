@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
+import static com.fbosch.assignment.githubrepositories.util.Constants.ITEMS_PER_PAGE;
 import static com.fbosch.assignment.githubrepositories.util.NetworkUtil.call;
 
 public class RepositoryListPresenter extends BasePresenter<RepositoryListMvpView> {
@@ -43,9 +44,22 @@ public class RepositoryListPresenter extends BasePresenter<RepositoryListMvpView
 
     public void loadRepositoryList() {
         assertViewAttached();
-        addSubscription(call(githubService.getJakeWhartonRepositories(1, 15))
+        addSubscription(call(githubService.getJakeWhartonRepositories(1, ITEMS_PER_PAGE))
                 .subscribe(this::showRepositoryList,
                         throwable -> {
+                            Timber.e(throwable.getMessage());
+                            getView().onError(throwable.getMessage());
+                        })
+        );
+    }
+
+    public void loadMoreItems(int page) {
+        assertViewAttached();
+        addSubscription(call(githubService.getJakeWhartonRepositories(page, ITEMS_PER_PAGE))
+                .subscribe(items -> {
+                    repositories.addAll(new ArrayList<>(items));
+                    getView().loadMoreRepositories(items);
+                }, throwable -> {
                             Timber.e(throwable.getMessage());
                             getView().onError(throwable.getMessage());
                         })
