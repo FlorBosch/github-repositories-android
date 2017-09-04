@@ -55,6 +55,7 @@ class RepositoryListViewAdapter extends RecyclerView.Adapter<RepositoryListViewA
 
         public void onBindView(Repository item) {
             binding.setVariable(BR.repository, item);
+            binding.executePendingBindings();
         }
     }
 }
