@@ -10,5 +10,6 @@ public interface RepositoryListMvpView extends MvpView {
 
     void displayRepositories(List<Repository> repositories);
     void loadMoreRepositories(List<Repository> repositories);
+    void onError(String message);
 
 }
