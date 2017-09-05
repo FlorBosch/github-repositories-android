@@ -27,6 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.fbosch.assignment.githubrepositories.ui.util.CustomViewMatcher.atPosition;
 import static com.fbosch.assignment.githubrepositories.ui.util.CustomViewMatcher.matchesItemCount;
+import static com.fbosch.assignment.githubrepositories.util.Constants.ITEMS_PER_PAGE;
 
 @RunWith(AndroidJUnit4.class)
 public class RepositoryListActivityTest {
@@ -42,11 +43,16 @@ public class RepositoryListActivityTest {
 
     @Test
     public void repositoryListTest() {
-        validateListItems(GithubServiceMock.getRepositoryList(15));
+        List<Repository> repositories =  GithubServiceMock.getRepositoryList(1, ITEMS_PER_PAGE);
+        ViewInteraction view = onView(withId(R.id.endless_scroll_recycler_view_id));
+        view.check(matches(matchesItemCount(ITEMS_PER_PAGE)));
+        validateListItems(view, repositories);
+        view.check(matches(matchesItemCount(ITEMS_PER_PAGE * 2)));
+        repositories.addAll(GithubServiceMock.getRepositoryList(2, ITEMS_PER_PAGE));
+        validateListItems(view, repositories);
     }
 
-    public static void validateListItems(List<Repository> repositories) {
-        ViewInteraction view = onView(withId(R.id.repository_list));
+    public static void validateListItems(ViewInteraction view, List<Repository> repositories) {
         for (int i = 0; i < repositories.size(); i++) {
             Repository item = repositories.get(i);
             view.perform(scrollToPosition(i));
@@ -64,7 +70,6 @@ public class RepositoryListActivityTest {
                     .check(matches(atPosition(i, withText(item.getLastUpdate()),
                             R.id.repository_last_update)));
         }
-        view.check(matches(matchesItemCount(repositories.size())));
     }
 
 }
