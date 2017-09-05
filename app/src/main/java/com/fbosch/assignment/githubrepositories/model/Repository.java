@@ -6,6 +6,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import static com.fbosch.assignment.githubrepositories.util.DateUtil.parseDate;
+
 
 public class Repository implements Parcelable {
 
@@ -68,6 +70,10 @@ public class Repository implements Parcelable {
 
     public String getForksAsString() {
         return String.valueOf(forks);
+    }
+
+    public String getDateFormatted() {
+        return parseDate(getLastUpdate());
     }
 
     @Override
