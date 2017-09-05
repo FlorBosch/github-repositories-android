@@ -13,21 +13,21 @@ import static com.fbosch.assignment.githubrepositories.util.Constants.ITEMS_PER_
 
 public class RepositoryRemoteDataSource implements RepositoryDataSource {
 
-  private GithubService githubService;
+    private GithubService githubService;
 
-  @Inject
-  public RepositoryRemoteDataSource(GithubService githubService) {
-    this.githubService = githubService;
-  }
+    @Inject
+    public RepositoryRemoteDataSource(GithubService githubService) {
+        this.githubService = githubService;
+    }
 
-  @Override
-  public Flowable<List<Repository>> getRepositories(boolean forceRemote, int page) {
-    return githubService.getJakeWhartonRepositories(page, ITEMS_PER_PAGE);
-  }
+    @Override
+    public Flowable<List<Repository>> getRepositories(boolean forceRemote, int page) {
+        return githubService.getJakeWhartonRepositories(page, ITEMS_PER_PAGE);
+    }
 
-  @Override
-  public void saveRepository(Repository repository) {
-    throw new UnsupportedOperationException("Unsupported operation");
-  }
+    @Override
+    public void saveRepository(Repository repository) {
+        throw new UnsupportedOperationException("Unsupported operation");
+    }
 
 }

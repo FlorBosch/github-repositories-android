@@ -57,8 +57,8 @@ public class RepositoryListPresenter extends BasePresenter<RepositoryListMvpView
 
     public void loadMoreItems(int page) {
         assertViewAttached();
-        addDisposable(call(githubService.getRepositories(true, page))
-                .subscribe(items -> {
+        addDisposable(call(githubService.getRepositories(true, page)).subscribe(
+                items -> {
                     repositories.addAll(new ArrayList<>(items));
                     getView().loadMoreRepositories(items);
                 }, throwable -> {
@@ -68,20 +68,22 @@ public class RepositoryListPresenter extends BasePresenter<RepositoryListMvpView
         );
     }
 
+    // Retrieving data from local storage
     private void handleError() {
-        // Retrieving data from local storage
         addDisposable(call(githubService.getRepositories(false, 1))
                 .take(1)
-                .subscribe(repositories -> {
-                    if (repositories.isEmpty()) {
-                        throw new ApiException("Connection error and no data in local storage.");
-                    }
-                    showRepositoryList(repositories);
-                    getView().onError(R.string.warning_data_might_be_outdated);
-                }, throwable -> {
-                    Timber.e(throwable.getMessage());
-                    getView().onNetworkError();
-                })
+                .subscribe(
+                        repositories -> {
+                            if (repositories.isEmpty()) {
+                                throw new ApiException(
+                                        "Connection error and no data in local storage.");
+                            }
+                            showRepositoryList(repositories);
+                            getView().onError(R.string.warning_data_might_be_outdated);
+                        }, throwable -> {
+                            Timber.e(throwable.getMessage());
+                            getView().onNetworkError();
+                        })
         );
     }
 

@@ -8,23 +8,24 @@ import com.fbosch.assignment.githubrepositories.data.network.RepositoryRemoteDat
 
 import dagger.Module;
 import dagger.Provides;
+
 import javax.inject.Singleton;
 
 @Module
 public class RepositoryModule {
 
-  @Provides
-  @Local
-  @Singleton
-  public RepositoryDataSource provideLocalDataSource(RepositoryLocalDataSource localDataSource) {
-    return localDataSource;
-  }
+    @Provides
+    @Local
+    @Singleton
+    public RepositoryDataSource provideLocalDataSource(RepositoryLocalDataSource localDataSource) {
+        return localDataSource;
+    }
 
-  @Provides
-  @Remote
-  @Singleton
-  public RepositoryDataSource provideRemoteDataSource(RepositoryRemoteDataSource remoteDataSource) {
-    return remoteDataSource;
-  }
+    @Provides
+    @Remote
+    @Singleton
+    public RepositoryDataSource provideRemoteDataSource(RepositoryRemoteDataSource dataSource) {
+        return dataSource;
+    }
 
 }
