@@ -95,6 +95,7 @@ public class RepositoryListActivity extends BaseActivity implements RepositoryLi
     public void onError(@StringRes int errorMessage) {
         swipeRefresh.setRefreshing(false);
         dataContainer.stopLoading();
+        listView.onErrorLoadingItems();
         new AlertDialog.Builder(this)
                 .setMessage(errorMessage)
                 .setCancelable(false)

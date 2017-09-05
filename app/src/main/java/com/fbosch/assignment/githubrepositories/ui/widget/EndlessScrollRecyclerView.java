@@ -63,6 +63,10 @@ public class EndlessScrollRecyclerView extends RelativeLayout {
         recyclerView.addItemDecoration(itemDecoration);
     }
 
+    public void onErrorLoadingItems() {
+        progressBar.setVisibility(View.GONE);
+    }
+
     public void onNewItemsLoaded() {
         progressBar.setVisibility(View.GONE);
     }

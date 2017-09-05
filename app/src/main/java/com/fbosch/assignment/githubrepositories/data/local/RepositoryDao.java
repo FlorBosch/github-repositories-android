@@ -14,7 +14,7 @@ import io.reactivex.Flowable;
 @Dao
 public interface RepositoryDao {
 
-    @Query("SELECT * FROM repositories")
+    @Query("SELECT * FROM repositories ORDER BY name")
     Flowable<List<Repository>> getAllRepositories();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

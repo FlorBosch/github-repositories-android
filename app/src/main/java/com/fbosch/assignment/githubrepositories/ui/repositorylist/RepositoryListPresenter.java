@@ -46,6 +46,7 @@ public class RepositoryListPresenter extends BasePresenter<RepositoryListMvpView
     public void loadRepositoryList() {
         assertViewAttached();
         addDisposable(call(githubService.getRepositories(true, 1))
+                .take(1)
                 .subscribe(this::showRepositoryList,
                         throwable -> {
                             Timber.e(throwable.getMessage());
@@ -70,6 +71,7 @@ public class RepositoryListPresenter extends BasePresenter<RepositoryListMvpView
     private void handleError() {
         // Retrieving data from local storage
         addDisposable(call(githubService.getRepositories(false, 1))
+                .take(1)
                 .subscribe(repositories -> {
                     if (repositories.isEmpty()) {
                         throw new ApiException("Connection error and no data in local storage.");
