@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GitHubRepositories</string>
+    <string name="app_name">Repositories</string>
     <string name="ok">OK</string>
     <string name="retry">Retry</string>
     <string name="no_internet_conection">Unable to retrieve data.\n Please connect to the Internet</string>
