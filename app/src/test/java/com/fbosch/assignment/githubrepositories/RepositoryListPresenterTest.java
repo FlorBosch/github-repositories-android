@@ -66,13 +66,13 @@ public class RepositoryListPresenterTest {
     }
 
     @Test
-    public void loadGifListFails() {
-        when(mockService.getRepositories(true, 1))
+    public void loadRepositoryListFails() {
+        when(mockService.getRepositories(true, 2))
                 .thenReturn(Flowable.error(new Throwable("Error message")));
 
-        presenter.loadRepositoryList();
+        presenter.loadMoreItems(2);
         verify(mockMvpView).onError("Error message");
-        verify(mockMvpView, never()).displayRepositories(new ArrayList<>());
+        verify(mockMvpView, never()).loadMoreRepositories(new ArrayList<>());
     }
 
     @Test

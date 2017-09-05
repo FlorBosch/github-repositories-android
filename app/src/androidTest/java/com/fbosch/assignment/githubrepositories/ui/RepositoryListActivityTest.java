@@ -67,7 +67,7 @@ public class RepositoryListActivityTest {
                             R.id.repository_stars)))
                     .check(matches(atPosition(i, withText(item.getForksAsString()),
                             R.id.repository_forks)))
-                    .check(matches(atPosition(i, withText(item.getLastUpdate()),
+                    .check(matches(atPosition(i, withText(item.getDateFormatted()),
                             R.id.repository_last_update)));
         }
     }

@@ -6,9 +6,7 @@ import android.content.Context;
 
 import com.fbosch.assignment.githubrepositories.data.RepositoryDataSource;
 import com.fbosch.assignment.githubrepositories.data.local.Local;
-import com.fbosch.assignment.githubrepositories.data.local.RepositoryLocalDataSource;
 import com.fbosch.assignment.githubrepositories.data.network.Remote;
-import com.fbosch.assignment.githubrepositories.data.network.RepositoryRemoteDataSource;
 import com.fbosch.assignment.githubrepositories.injection.ApplicationContext;
 import com.fbosch.assignment.githubrepositories.injection.GithubServiceMock;
 
@@ -40,14 +38,14 @@ public class ApplicationTestModule {
     @Provides
     @Local
     @Singleton
-    public RepositoryDataSource provideLocalDataSource(RepositoryLocalDataSource localDataSource) {
+    public RepositoryDataSource provideLocalDataSource() {
         return new GithubServiceMock();
     }
 
     @Provides
     @Remote
     @Singleton
-    public RepositoryDataSource provideRemoteDataSource(RepositoryRemoteDataSource remoteDataSource) {
+    public RepositoryDataSource provideRemoteDataSource() {
         return new GithubServiceMock();
     }
 
