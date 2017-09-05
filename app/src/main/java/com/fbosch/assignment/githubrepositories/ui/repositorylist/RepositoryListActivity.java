@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import com.fbosch.assignment.githubrepositories.R;
 import com.fbosch.assignment.githubrepositories.model.Repository;
 import com.fbosch.assignment.githubrepositories.ui.BaseActivity;
+import com.fbosch.assignment.githubrepositories.ui.widget.DataContainerLayout;
 import com.fbosch.assignment.githubrepositories.ui.widget.EndlessScrollRecyclerView;
 
 import java.util.List;
@@ -32,6 +33,8 @@ public class RepositoryListActivity extends BaseActivity implements RepositoryLi
     @BindView(R.id.repository_list)
     EndlessScrollRecyclerView listView;
 
+    @BindView(R.id.repository_list_container)
+    DataContainerLayout dataContainer;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -50,6 +53,8 @@ public class RepositoryListActivity extends BaseActivity implements RepositoryLi
         listView.setHasFixedSize(true);
         listView.addItemDecoration(new DividerItemDecoration(listView.getContext(), VERTICAL));
         listView.setUp(presenter::loadMoreItems);
+        dataContainer.setUp(presenter::loadRepositoryList);
+        swipeRefresh.setOnRefreshListener(presenter::loadRepositoryList);
         presenter.restoreState(savedInstanceState);
     }
 
@@ -70,18 +75,25 @@ public class RepositoryListActivity extends BaseActivity implements RepositoryLi
         swipeRefresh.setRefreshing(false);
         adapter = new RepositoryListViewAdapter(repositories);
         listView.swapAdapter(adapter, false);
+        dataContainer.stopLoading();
     }
 
     @Override
     public void loadMoreRepositories(List<Repository> repositories) {
-        swipeRefresh.setRefreshing(false);
         adapter.addItems(repositories);
         listView.onNewItemsLoaded();
     }
 
     @Override
+    public void onNetworkError() {
+        swipeRefresh.setRefreshing(false);
+        dataContainer.displayError();
+    }
+
+    @Override
     public void onError(String errorMessage) {
         swipeRefresh.setRefreshing(false);
+        dataContainer.stopLoading();
         new AlertDialog.Builder(this)
                 .setTitle(R.string.error)
                 .setMessage(errorMessage)

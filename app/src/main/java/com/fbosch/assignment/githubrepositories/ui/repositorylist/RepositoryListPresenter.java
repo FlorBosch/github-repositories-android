@@ -48,7 +48,7 @@ public class RepositoryListPresenter extends BasePresenter<RepositoryListMvpView
                 .subscribe(this::showRepositoryList,
                         throwable -> {
                             Timber.e(throwable.getMessage());
-                            getView().onError(throwable.getMessage());
+                            getView().onNetworkError();
                         })
         );
     }
