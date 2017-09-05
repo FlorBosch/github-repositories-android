@@ -21,6 +21,7 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -62,16 +63,16 @@ public class RepositoryListPresenterTest {
 
         presenter.loadRepositoryList();
         verify(mockMvpView).displayRepositories(repositories);
-        verify(mockMvpView, never()).onError(anyString());
+        verify(mockMvpView, never()).onError(anyInt());
     }
 
     @Test
     public void loadRepositoryListFails() {
         when(mockService.getRepositories(true, 2))
-                .thenReturn(Flowable.error(new Throwable("Error message")));
+                .thenReturn(Flowable.error(new Throwable()));
 
         presenter.loadMoreItems(2);
-        verify(mockMvpView).onError("Error message");
+        verify(mockMvpView).onError(R.string.error_loading_more_items);
         verify(mockMvpView, never()).loadMoreRepositories(new ArrayList<>());
     }
 

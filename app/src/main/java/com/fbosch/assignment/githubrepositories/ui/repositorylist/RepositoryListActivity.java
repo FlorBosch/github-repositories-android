@@ -1,6 +1,7 @@
 package com.fbosch.assignment.githubrepositories.ui.repositorylist;
 
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
@@ -73,9 +74,9 @@ public class RepositoryListActivity extends BaseActivity implements RepositoryLi
     @Override
     public void displayRepositories(List<Repository> repositories) {
         swipeRefresh.setRefreshing(false);
+        dataContainer.stopLoading();
         adapter = new RepositoryListViewAdapter(repositories);
         listView.swapAdapter(adapter, false);
-        dataContainer.stopLoading();
     }
 
     @Override
@@ -91,11 +92,10 @@ public class RepositoryListActivity extends BaseActivity implements RepositoryLi
     }
 
     @Override
-    public void onError(String errorMessage) {
+    public void onError(@StringRes int errorMessage) {
         swipeRefresh.setRefreshing(false);
         dataContainer.stopLoading();
         new AlertDialog.Builder(this)
-                .setTitle(R.string.error)
                 .setMessage(errorMessage)
                 .setCancelable(false)
                 .setPositiveButton(R.string.ok, (dialog, i) -> dialog.dismiss())

@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">GitHubRepositories</string>
-    <string name="error">An error occurred</string>
     <string name="ok">OK</string>
     <string name="retry">Retry</string>
     <string name="no_internet_conection">Unable to retrieve data.\n Please connect to the Internet</string>
+    <string name="error_loading_more_items">Error loading more repositories</string>
+    <string name="warning_data_might_be_outdated">Unable to retrieve data.\n The list might be outdated</string>
 </resources>

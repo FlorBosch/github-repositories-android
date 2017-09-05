@@ -12,37 +12,41 @@ import io.reactivex.Flowable;
 
 public class GithubRepositoriesRepository implements RepositoryDataSource {
 
-  private RepositoryDataSource remoteDataSource;
-  private RepositoryDataSource localDataSource;
+    private RepositoryDataSource remoteDataSource;
+    private RepositoryDataSource localDataSource;
 
-  @Inject
-  public GithubRepositoriesRepository(@Local RepositoryDataSource localDataSource,
-      @Remote RepositoryDataSource remoteDataSource) {
-    this.localDataSource = localDataSource;
-    this.remoteDataSource = remoteDataSource;
-  }
-
-  @Override
-  public Flowable<List<Repository>> getRepositories(boolean forceRemote, int page) {
-    if (!forceRemote) {
-      return localDataSource.getRepositories(false, page);
+    @Inject
+    public GithubRepositoriesRepository(@Local RepositoryDataSource localDataSource,
+                                        @Remote RepositoryDataSource remoteDataSource) {
+        this.localDataSource = localDataSource;
+        this.remoteDataSource = remoteDataSource;
     }
-    return remoteDataSource.getRepositories(true, page)
-            .doOnNext(this::saveDataToLocal);
-  }
 
-  @Override
-  public void saveRepository(Repository repository) {
-    throw new UnsupportedOperationException("Unsupported operation");
-  }
+    @Override
+    public Flowable<List<Repository>> getRepositories(boolean forceRemote, int page) {
+        if (!forceRemote) {
+            return localDataSource.getRepositories(false, page);
+        }
+        return remoteDataSource.getRepositories(true, page)
+                .doOnEach(notification -> {
+                    if (notification.isOnNext()) {
+                        saveDataToLocal(notification.getValue());
+                    }
+                });
+    }
 
-  private void saveDataToLocal(List<Repository> repositories) {
-    if (repositories == null) {
-      return;
+    @Override
+    public void saveRepository(Repository repository) {
+        throw new UnsupportedOperationException("Unsupported operation");
     }
-    for (Repository repository : repositories) {
-      localDataSource.saveRepository(repository);
+
+    private void saveDataToLocal(List<Repository> repositories) {
+        if (repositories == null) {
+            return;
+        }
+        for (Repository repository : repositories) {
+            localDataSource.saveRepository(repository);
+        }
     }
-  }
 
 }
