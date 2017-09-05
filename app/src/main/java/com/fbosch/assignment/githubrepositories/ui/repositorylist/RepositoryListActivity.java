@@ -8,7 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 
 import com.fbosch.assignment.githubrepositories.R;
-import com.fbosch.assignment.githubrepositories.model.Repository;
+import com.fbosch.assignment.githubrepositories.data.model.Repository;
 import com.fbosch.assignment.githubrepositories.ui.BaseActivity;
 import com.fbosch.assignment.githubrepositories.ui.widget.DataContainerLayout;
 import com.fbosch.assignment.githubrepositories.ui.widget.EndlessScrollRecyclerView;

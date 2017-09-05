@@ -7,7 +7,7 @@
 
         <variable
             name="repository"
-            type="com.fbosch.assignment.githubrepositories.model.Repository" />
+            type="com.fbosch.assignment.githubrepositories.data.model.Repository" />
     </data>
 
     <android.support.constraint.ConstraintLayout

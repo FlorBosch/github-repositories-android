@@ -11,6 +11,8 @@ import android.widget.RelativeLayout;
 
 import com.fbosch.assignment.githubrepositories.R;
 
+import static com.fbosch.assignment.githubrepositories.util.Constants.VISIBLE_THRESHOLD;
+
 public class EndlessScrollRecyclerView extends RelativeLayout {
 
     private EndlessRecyclerOnScrollListener scrollListener;
@@ -33,7 +35,7 @@ public class EndlessScrollRecyclerView extends RelativeLayout {
     }
 
     public void setUp(OnLoadMoreListener listener) {
-        scrollListener = new EndlessRecyclerOnScrollListener() {
+        scrollListener = new EndlessRecyclerOnScrollListener(VISIBLE_THRESHOLD) {
             @Override
             public void onLoadMore(int offset) {
                 progressBar.setVisibility(View.VISIBLE);

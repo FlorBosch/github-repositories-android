@@ -1,6 +1,8 @@
-package com.fbosch.assignment.githubrepositories.model;
+package com.fbosch.assignment.githubrepositories.data.model;
 
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,8 +11,10 @@ import com.google.gson.annotations.SerializedName;
 import static com.fbosch.assignment.githubrepositories.util.DateUtil.parseDate;
 
 
+@Entity(tableName = "repositories")
 public class Repository implements Parcelable {
 
+    @PrimaryKey
     private final Long id;
     private final String name;
     private final String description;
@@ -102,7 +106,7 @@ public class Repository implements Parcelable {
         this.forks = in.readInt();
     }
 
-    public static final Parcelable.Creator<Repository> CREATOR = new Parcelable.Creator<Repository>() {
+    public static final Creator<Repository> CREATOR = new Creator<Repository>() {
         @Override
         public Repository createFromParcel(Parcel source) {
             return new Repository(source);

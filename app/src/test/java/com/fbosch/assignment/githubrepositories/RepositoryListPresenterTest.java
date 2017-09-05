@@ -2,8 +2,8 @@ package com.fbosch.assignment.githubrepositories;
 
 import android.os.Bundle;
 
-import com.fbosch.assignment.githubrepositories.model.Repository;
-import com.fbosch.assignment.githubrepositories.network.GithubService;
+import com.fbosch.assignment.githubrepositories.data.GithubRepositoriesRepository;
+import com.fbosch.assignment.githubrepositories.data.model.Repository;
 import com.fbosch.assignment.githubrepositories.ui.repositorylist.RepositoryListMvpView;
 import com.fbosch.assignment.githubrepositories.ui.repositorylist.RepositoryListPresenter;
 
@@ -19,7 +19,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Flowable;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
@@ -33,7 +33,7 @@ public class RepositoryListPresenterTest {
     RepositoryListMvpView mockMvpView;
 
     @Mock
-    GithubService mockService;
+    GithubRepositoriesRepository mockService;
 
     @Mock
     Bundle bundle;
@@ -57,8 +57,8 @@ public class RepositoryListPresenterTest {
     @Test
     public void loadRepositoryList() {
         List<Repository> repositories = getRepositories();
-        when(mockService.getJakeWhartonRepositories(1, 15))
-                .thenReturn(Observable.just(repositories));
+        when(mockService.getRepositories(true, 1))
+                .thenReturn(Flowable.just(repositories));
 
         presenter.loadRepositoryList();
         verify(mockMvpView).displayRepositories(repositories);
@@ -67,8 +67,8 @@ public class RepositoryListPresenterTest {
 
     @Test
     public void loadGifListFails() {
-        when(mockService.getJakeWhartonRepositories(1, 15))
-                .thenReturn(Observable.error(new Throwable("Error message")));
+        when(mockService.getRepositories(true, 1))
+                .thenReturn(Flowable.error(new Throwable("Error message")));
 
         presenter.loadRepositoryList();
         verify(mockMvpView).onError("Error message");
@@ -78,8 +78,8 @@ public class RepositoryListPresenterTest {
     @Test
     public void restoreState() {
         List<Repository> repositories = getRepositories();
-        when(mockService.getJakeWhartonRepositories(1, 15))
-                .thenReturn(Observable.just(repositories));
+        when(mockService.getRepositories(true, 1))
+                .thenReturn(Flowable.just(repositories));
         when(bundle.containsKey(RepositoryListPresenter.KEY_REPOSITORY_LIST)).thenReturn(true);
         when(bundle.getParcelableArrayList(RepositoryListPresenter.KEY_REPOSITORY_LIST))
                 .thenReturn(new ArrayList<>(repositories));

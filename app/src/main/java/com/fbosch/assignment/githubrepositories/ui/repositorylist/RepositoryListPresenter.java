@@ -2,8 +2,8 @@ package com.fbosch.assignment.githubrepositories.ui.repositorylist;
 
 import android.os.Bundle;
 
-import com.fbosch.assignment.githubrepositories.model.Repository;
-import com.fbosch.assignment.githubrepositories.network.GithubService;
+import com.fbosch.assignment.githubrepositories.data.GithubRepositoriesRepository;
+import com.fbosch.assignment.githubrepositories.data.model.Repository;
 import com.fbosch.assignment.githubrepositories.ui.BasePresenter;
 
 import java.util.ArrayList;
@@ -22,10 +22,10 @@ public class RepositoryListPresenter extends BasePresenter<RepositoryListMvpView
 
     private List<Repository> repositories = new ArrayList<>();
 
-    private GithubService githubService;
+    private GithubRepositoriesRepository githubService;
 
     @Inject
-    public RepositoryListPresenter(GithubService service) {
+    public RepositoryListPresenter(GithubRepositoriesRepository service) {
         this.githubService = service;
     }
 
@@ -44,24 +44,33 @@ public class RepositoryListPresenter extends BasePresenter<RepositoryListMvpView
 
     public void loadRepositoryList() {
         assertViewAttached();
-        addSubscription(call(githubService.getJakeWhartonRepositories(1, ITEMS_PER_PAGE))
+        addDisposable(call(githubService.getRepositories(true, 1))
                 .subscribe(this::showRepositoryList,
                         throwable -> {
-                            Timber.e(throwable.getMessage());
-                            getView().onNetworkError();
+                            handleError();
                         })
         );
     }
 
     public void loadMoreItems(int page) {
         assertViewAttached();
-        addSubscription(call(githubService.getJakeWhartonRepositories(page, ITEMS_PER_PAGE))
+        addDisposable(call(githubService.getRepositories(true, page))
                 .subscribe(items -> {
                     repositories.addAll(new ArrayList<>(items));
                     getView().loadMoreRepositories(items);
                 }, throwable -> {
                             Timber.e(throwable.getMessage());
                             getView().onError(throwable.getMessage());
+                        })
+        );
+    }
+
+    private void handleError() {
+        addDisposable(call(githubService.getRepositories(false, 1))
+                .subscribe(this::showRepositoryList,
+                        throwable -> {
+                            Timber.e(throwable.getMessage());
+                            getView().onNetworkError();
                         })
         );
     }

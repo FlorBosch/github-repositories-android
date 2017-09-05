@@ -8,8 +8,10 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     private int previousTotal = 0;
     private boolean loading = true;
     private int currentPage = 1;
+    private int visibleThreshold;
 
-    public EndlessRecyclerOnScrollListener() {
+    public EndlessRecyclerOnScrollListener(int visibleThreshold) {
+        this.visibleThreshold = visibleThreshold;
     }
 
     @Override
@@ -25,7 +27,8 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
             loading = false;
             previousTotal = totalItemCount;
         }
-        if (!loading && (totalItemCount - visibleItemCount) <= firstVisibleItem) {
+        if (!loading &&
+                (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
             currentPage++;
             onLoadMore(currentPage);
             loading = true;

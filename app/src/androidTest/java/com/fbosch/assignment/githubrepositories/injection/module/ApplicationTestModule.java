@@ -4,9 +4,13 @@ package com.fbosch.assignment.githubrepositories.injection.module;
 import android.app.Application;
 import android.content.Context;
 
+import com.fbosch.assignment.githubrepositories.data.RepositoryDataSource;
+import com.fbosch.assignment.githubrepositories.data.local.Local;
+import com.fbosch.assignment.githubrepositories.data.local.RepositoryLocalDataSource;
+import com.fbosch.assignment.githubrepositories.data.network.Remote;
+import com.fbosch.assignment.githubrepositories.data.network.RepositoryRemoteDataSource;
 import com.fbosch.assignment.githubrepositories.injection.ApplicationContext;
 import com.fbosch.assignment.githubrepositories.injection.GithubServiceMock;
-import com.fbosch.assignment.githubrepositories.network.GithubService;
 
 import javax.inject.Singleton;
 
@@ -34,8 +38,16 @@ public class ApplicationTestModule {
     }
 
     @Provides
+    @Local
     @Singleton
-    GithubService provideGithubService() {
+    public RepositoryDataSource provideLocalDataSource(RepositoryLocalDataSource localDataSource) {
+        return new GithubServiceMock();
+    }
+
+    @Provides
+    @Remote
+    @Singleton
+    public RepositoryDataSource provideRemoteDataSource(RepositoryRemoteDataSource remoteDataSource) {
         return new GithubServiceMock();
     }
 

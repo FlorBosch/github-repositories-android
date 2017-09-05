@@ -1,20 +1,24 @@
 package com.fbosch.assignment.githubrepositories.injection;
 
-import com.fbosch.assignment.githubrepositories.model.Repository;
-import com.fbosch.assignment.githubrepositories.network.GithubService;
+import com.fbosch.assignment.githubrepositories.data.RepositoryDataSource;
+import com.fbosch.assignment.githubrepositories.data.model.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.http.Query;
-import rx.Observable;
+import io.reactivex.Flowable;
 
-public class GithubServiceMock implements GithubService {
+import static com.fbosch.assignment.githubrepositories.util.Constants.ITEMS_PER_PAGE;
+
+public class GithubServiceMock implements RepositoryDataSource {
 
     @Override
-    public Observable<List<Repository>> getJakeWhartonRepositories(@Query("page") int page,
-                                                                   @Query("per_page") int perPage) {
-        return Observable.just(getRepositoryList(page, perPage));
+    public Flowable<List<Repository>> getRepositories(boolean forceRemote, int page) {
+        return Flowable.just(getRepositoryList(page, ITEMS_PER_PAGE));
+    }
+
+    @Override
+    public void saveRepository(Repository repository) {
     }
 
     public static List<Repository> getRepositoryList(int page, int perPage) {

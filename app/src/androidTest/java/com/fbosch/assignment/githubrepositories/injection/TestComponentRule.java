@@ -11,23 +11,28 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import rx.Scheduler;
-import rx.android.plugins.RxAndroidPlugins;
-import rx.android.plugins.RxAndroidSchedulersHook;
-import rx.functions.Func1;
-import rx.plugins.RxJavaHooks;
-import rx.schedulers.Schedulers;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.android.plugins.RxAndroidPlugins;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.internal.schedulers.ExecutorScheduler;
+import io.reactivex.plugins.RxJavaPlugins;
 
 public class TestComponentRule implements TestRule {
 
-    private final RxAndroidSchedulersHook schedulersHook = new RxAndroidSchedulersHook() {
+    private io.reactivex.Scheduler immediate = new io.reactivex.Scheduler() {
         @Override
-        public Scheduler getMainThreadScheduler() {
-            return Schedulers.immediate();
+        public Disposable scheduleDirect(@NonNull Runnable run, long delay,
+                                         @NonNull TimeUnit unit) {
+            return super.scheduleDirect(run, 0, unit);
+        }
+
+        @Override
+        public Worker createWorker() {
+            return new ExecutorScheduler.ExecutorWorker(Runnable::run);
         }
     };
-
-    private final Func1<Scheduler, Scheduler> scheduler = scheduler -> Schedulers.immediate();
 
     private final TestComponent testComponent;
     private final Context context;
@@ -45,21 +50,23 @@ public class TestComponentRule implements TestRule {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
-                RxAndroidPlugins.getInstance().reset();
-                RxAndroidPlugins.getInstance().registerSchedulersHook(schedulersHook);
+                RxJavaPlugins.setInitIoSchedulerHandler(scheduler -> immediate);
+                RxJavaPlugins.setInitComputationSchedulerHandler(scheduler -> immediate);
+                RxJavaPlugins.setInitNewThreadSchedulerHandler(scheduler -> immediate);
+                RxJavaPlugins.setInitSingleSchedulerHandler(scheduler -> immediate);
+                RxAndroidPlugins.setInitMainThreadSchedulerHandler(scheduler -> immediate);
 
-                RxJavaHooks.reset();
-                RxJavaHooks.setOnIOScheduler(scheduler);
-                RxJavaHooks.setOnNewThreadScheduler(scheduler);
-
-                RepositoryApplication application = RepositoryApplication.get(context);
-                application.setComponent(testComponent);
-                base.evaluate();
-                application.setComponent(null);
-
-                RxAndroidPlugins.getInstance().reset();
-                RxJavaHooks.reset();
+                try {
+                    RepositoryApplication application = RepositoryApplication.get(context);
+                    application.setComponent(testComponent);
+                    base.evaluate();
+                    application.setComponent(null);
+                } finally {
+                    RxJavaPlugins.reset();
+                    RxAndroidPlugins.reset();
+                }
             }
         };
     }
+
 }

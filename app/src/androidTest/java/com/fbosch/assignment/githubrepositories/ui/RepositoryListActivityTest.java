@@ -9,7 +9,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.fbosch.assignment.githubrepositories.R;
 import com.fbosch.assignment.githubrepositories.injection.GithubServiceMock;
 import com.fbosch.assignment.githubrepositories.injection.TestComponentRule;
-import com.fbosch.assignment.githubrepositories.model.Repository;
+import com.fbosch.assignment.githubrepositories.data.model.Repository;
 import com.fbosch.assignment.githubrepositories.ui.repositorylist.RepositoryListActivity;
 
 import org.junit.Rule;

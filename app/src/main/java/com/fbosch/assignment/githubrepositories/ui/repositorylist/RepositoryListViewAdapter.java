@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.fbosch.assignment.githubrepositories.BR;
 import com.fbosch.assignment.githubrepositories.R;
-import com.fbosch.assignment.githubrepositories.model.Repository;
+import com.fbosch.assignment.githubrepositories.data.model.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
